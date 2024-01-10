@@ -145,24 +145,76 @@ singapore_subset = data[data['country'] == 'Singapore'].reset_index()
 
 **Save the Cleaned Datasets**                                        
 Save the cleaned datasets to a new file for further analysis.                              
-Using ```.to_csv("path\\to\\save\\cleaned_dataset")```                                         
+Using ```.to_csv("path\\to\\save\\cleaned_dataset", index=False)```                                         
 **Input:**
 ```python
-global_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\GlobalSubset_Cleaned.csv")
-singapore_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\SingaporeSubset_Cleaned.csv")
+global_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\GlobalSubset_Cleaned.csv", index=False)
+singapore_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\SingaporeSubset_Cleaned.csv", index=False)
 ```
 
 **Merge Countries in Global to get Mean of each variable**
 Since we are comparing temperature trends of global and Singapore, we must merge countries in global.                                                                                     
 1) Remove ```country``` and ```location_name``` using ```.drop(['country', 'location_name'], axis=1)```, where ```axis=1``` refers to columns and ```axis=0``` refers to rows.
 2) Group Data by Date then Calcuate the Mean of each Variable using ```.groupby('last_updated').mean()```
-3) Save the new Dataset to a new file using ```.to_csv("path\\to\\save\\new_dataset")```
+3) Save the new Dataset to a new file using ```.to_csv("path\\to\\save\\new_dataset", index=False)```
 
 **Input:**
 ```python
+# Remove country and location_name
 global_subset = global_subset.drop(['country', 'location_name'], axis=1)
+# Group Data by Date and Calculate Mean of Variables
 mean_global_subset = global_subset.groupby('last_updated').mean().reset_index()
-mean_global_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\meanGlobalSubset.csv")
+# Save new Dataset to a new File
+mean_global_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\meanGlobalSubset.csv", index=False)
 ```
 
+---------------------
 
+### Exploratory Data Analysis (EDA)
+**Correlation between Environmental Factors**            
+Firstly, we have to find out the correlations between environmental factors to uncover relationships and patterns that contribute to a comprehensive understanding of short-term historical temperature trends.                                                
+1) Combine the data of Global and Singapore, using ```pd.concat```                  
+2) Create a Correlation Heatmap, using ```matplotlib.pyplot``` and ```seaborn```
+**Input:**
+```python
+# Combine both Global and Singapore data
+combined_data = pd.concat([mean_global_subset, singapore_subset], ignore_index=True)
+correlation_matrix_combined = combined_data[['temperature_celsius', 'wind_kph', 'pressure_mb', 'humidity', 'precip_mm']].corr()
+# Create a correlation heatmap
+plt.figure(figsize=(10, 8))
+sns.heatmap(correlation_matrix_combined, annot=True, cmap='coolwarm', fmt='.2f', linewidths=0.5, square=True)
+plt.title('Correlation Heatmap: Combined Global and Singapore Data')
+plt.show()
+```
+**Output:**
+![Screenshot 2024-01-10 171005](https://github.com/xinconggg/Weather-Trend/assets/82378681/bca62ca2-50de-4dc8-912a-ec9038abf0d7)
+From the heatmap, it is evident that:
+- The correlation between temperature and pressure has a moderate to strong inverse relationship. As atmospheric pressure decreases, temperatures tend to rise, and vice versa.
+- The correlation between windspeed and humidity indicates a moderate inverse relationship as well. Hence, higher wind speeds are associated with lower humidity levels.
+
+**Temperature Trends of Global and Singapore**            
+**Input:**
+```python
+plt.figure(figsize=(14, 6))
+# Temperature trend for Global
+sns.lineplot(x='last_updated', y='temperature_celsius', data=mean_global_subset, label='Global')
+# Temperature trend for Singapore
+sns.lineplot(x='last_updated', y='temperature_celsius', data=singapore_subset, label='Singapore')
+# Set plot title and labels
+plt.title('Temperature Trends Over Time: Global vs. Singapore')
+plt.xlabel('Date and Time')
+plt.ylabel('Temperature (°C)')
+# Set legend and display Line Plot
+plt.legend()
+plt.show()
+```
+**Output:**
+![Screenshot 2024-01-10 172314](https://github.com/xinconggg/Weather-Trend/assets/82378681/e593642d-1299-442b-be0d-9ea9f408844d)
+We can observe that:
+- Both datasets exhibit fluctuations, indicating a general alignment in temperature patterns during the specified timeframe.
+- Temperature of Singapore is more consistent, ranging from 25-32°C whereas Temperature of Global clearly fluctuates over time, ranging from 16-26°C.
+
+------------------------------------
+
+**Conclusion:**                                                                                                                                    
+The analysis of temperature trends not only revealed distinct climate patterns between Singapore and global locations but also aligned with the findings from the correlation analysis of environmental factors. Singapore's consistent temperature range, varying from 25-32°C, reflects the stability of its tropical climate. This coherence is further supported by the correlation analysis, which indicates that Singapore's temperature has a more stable relationship with other environmental factors. On the global scale, where temperatures exhibit wider fluctuations, the correlation heatmap highlights intricate relationships between various environmental factors, contributing to the observed variability. Understanding these correlations enhances our comprehension of regional climate behaviors, emphasizing the importance of considering interconnected environmental factors when interpreting temperature trends. This holistic approach is crucial for informed climate analysis, adaptation strategies, and policy planning on both local and global scales.
