@@ -72,6 +72,14 @@ data = pd.read_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\Global
 print(data.head())
 ```
 **Output:**![Screenshot 2024-01-09 233046](https://github.com/xinconggg/Weather-Trend/assets/82378681/206f0148-748c-4b05-a8fd-0809f183d3be)
+Since we only require the date where the data was collected, we can remove the time.     
+1) Use ```pd.to_datetime``` to convert the column to a datetime format.
+2) Use ```.dt.date``` to extract out the date portion                               
+**Input:**
+```python
+data['last_updated'] = pd.to_datetime(data['last_updated'], dayfirst=True)
+data['last_updated'] = data['last_updated'].dt.date
+```
 
 **Get Summary Statistics**                       
 - Provides summary statistics such as mean, standard deviation, etc.            
@@ -97,9 +105,64 @@ print(data.info())
 ---------------------
 
 ### Data Cleaning
-**asdasd**            
-- asd
- 
+**Handling Missing Values**            
+Firstly, check if there are any missing values using ```.isnull().sum()```   
+**Input:**
+```python
+print(data.isnull().sum())
+```
+**Output:**   
+![Screenshot 2024-01-10 115237](https://github.com/xinconggg/Weather-Trend/assets/82378681/df718364-2518-410a-9941-c7186e882831)                     
+Result shows that ```humidity``` contains 1 NULL value, hence proceed to drop the NULL value using ```.dropna()``` and check for NULL values again.                                 
+**Input:**
+```python
+data = data.dropna()
+print(data.isnull().sum())
+```
+**Output:**                                   
+![Screenshot 2024-01-10 115237](https://github.com/xinconggg/Weather-Trend/assets/82378681/5db8b84d-df59-4c9e-9856-c8ed5dc6c5e2)
 
+**Check Data Consistency and Correctness**                                        
+Visually check for data consistency and correctness, especially in categorical columns such as ```country``` and ```location_name```, then address the issues identified.                      
+Using ```.unique()```                                                               
+**Input:**
+```python
+print(data['country'].unique())
+print(data['location_name'].unique())
+```
+**Output:** 
+![Screenshot 2024-01-10 120954](https://github.com/xinconggg/Weather-Trend/assets/82378681/7661eaf6-ff4b-4c1a-80d7-d6b93de527ae)
+
+**Split the Cleaned Datasets**                                        
+Since we now have a clean dataset, split them into Global and Singapore since the project objective is to analyze the temperature trends between global locations and Singapore.         Create a subset for both global locations and Singapore.                                     
+**Input:**
+```python
+# Create a subset for Global Locations
+global_subset = data[data['country'] != 'Singapore'].reset_index()
+# Create a subset for Singapore
+singapore_subset = data[data['country'] == 'Singapore'].reset_index()
+```
+
+**Save the Cleaned Datasets**                                        
+Save the cleaned datasets to a new file for further analysis.                              
+Using ```.to_csv("path\\to\\save\\cleaned_dataset")```                                         
+**Input:**
+```python
+global_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\GlobalSubset_Cleaned.csv")
+singapore_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\SingaporeSubset_Cleaned.csv")
+```
+
+**Merge Countries in Global to get Mean of each variable**
+Since we are comparing temperature trends of global and Singapore, we must merge countries in global.                                                                                     
+1) Remove ```country``` and ```location_name``` using ```.drop(['country', 'location_name'], axis=1)```, where ```axis=1``` refers to columns and ```axis=0``` refers to rows.
+2) Group Data by Date then Calcuate the Mean of each Variable using ```.groupby('last_updated').mean()```
+3) Save the new Dataset to a new file using ```.to_csv("path\\to\\save\\new_dataset")```
+
+**Input:**
+```python
+global_subset = global_subset.drop(['country', 'location_name'], axis=1)
+mean_global_subset = global_subset.groupby('last_updated').mean().reset_index()
+mean_global_subset.to_csv("C:\\Users\\Xin Cong\\Downloads\\Data Analyst Project\\meanGlobalSubset.csv")
+```
 
 
