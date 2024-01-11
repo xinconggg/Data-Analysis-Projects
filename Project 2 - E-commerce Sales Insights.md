@@ -89,10 +89,41 @@ WHERE column_name_1 IS NULL or column_name_2 IS NULL
 ![Screenshot 2024-01-11 211718](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/a15cc62e-a26a-421e-82a3-8e9393226eab)                              
 109547 rows consisting of missing values were cleared.
 
+**Save the Cleaned Dataset**                                                             
+Excel → Data → Get Data → From Database → From SQL Database → Enter Server and Database name
+
 -------------
 
 ### Exploratory Data Analysis (EDA)
-**asdasdas**
+#### Performing Basic EDA in SQL                                                      
+**- Calculate Total Revenue**                                                              
+Using ```SUM```                                                                        
+```sql
+SELECT SUM(Amount) AS TotalRevenue
+FROM [Amazon Sale Report];
+```
+![Screenshot 2024-01-11 231012](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/ddb4ee70-b4d3-46af-896c-f328977a93c9)                              
+Total Revenue = $13,059,222.00                                                                 
+                                                      
+**- Calculate Average Order Value (AOV)**                                                  
+Using ```SUM```                                                                        
+```sql
+SELECT SUM(Amount)/COUNT(DISTINCT(Order_ID)) AS AverageOrderValue
+FROM [Amazon Sale Report];
+```
+![Screenshot 2024-01-11 231358](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/4d821f46-068c-4b09-83f0-d8201dd3ab51)                                 
+Average Order Value = $723.82
+
+**- Calculate Total Quantity Sold**                                                      
+Using ```SUM```                                                                        
+```sql
+SELECT SUM(QTY) AS TotalQuantitySold
+FROM [Amazon Sale Report];
+```
+![Screenshot 2024-01-11 231706](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/6833cd51-37cc-4832-a7b2-22e5c7906905)                            
+Total Quantity Sold = 19521
+
+#### Visualizations in Tableau 
 
 
 
