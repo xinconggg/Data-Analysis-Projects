@@ -35,4 +35,42 @@ The significance of this e-commerce sales analysis project lies in its potential
 
 --------------------
 
-asdasd
+### Data Exploration and Cleaning
+**Review Data Types**                                                             
+Inspect the data types of each column using ```INFORMATION_SCHEMA.COLUMNS```.                                                           
+```sql
+SELECT COLUMN_NAME, DATA_TYPE 
+FROM INFORMATION_SCHEMA.COLUMNS 
+WHERE TABLE_NAME = 'Amazon Sale Report'
+```
+![Screenshot 2024-01-11 205229](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/9cd7d348-6526-4304-914e-7e11f8943cf0)                  
+
+**Identify Missing Values**
+Using ```IS NULL```.
+```sql
+SELECT *
+FROM [Amazon Sale Report]
+WHERE column_name_1 IS NULL or column_name_1 IS NULL
+```
+![Screenshot 2024-01-11 210720](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/b005f21b-5aa9-4cff-bbf0-6d3dc559a7cb)
+**Handling Missing Values**                                                    
+Since there exists missing values, we can remove the rows using ```DELETE```.               
+However, becareful when removing columns, for example, ```promotion_ids``` are meant to contain missing values.                                                                      
+```sql
+DELETE FROM [Amazon Sale Report]
+WHERE column_name_1 IS NULL or column_name_2 IS NULL
+```
+![Screenshot 2024-01-11 211718](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/a15cc62e-a26a-421e-82a3-8e9393226eab)                              
+109547 rows consisting of missing values were cleared.
+
+-------------
+
+### Exploratory Data Analysis (EDA)
+**asdasdas**
+
+
+
+
+
+
+
