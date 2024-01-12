@@ -124,6 +124,7 @@ FROM [Amazon Sale Report];
 Total Quantity Sold = 19521
 
 #### Visualizations in Tableau 
+**Sales Trend Over Time**
 
 
 
