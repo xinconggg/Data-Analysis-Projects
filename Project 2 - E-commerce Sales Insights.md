@@ -257,7 +257,7 @@ Since p-value ≤ 0.05, the time-series is stationary.
 - **q and p (Order of Moving Average and Order of Order of Auto-Regressive):**
   - Plot Autocorrelation Function (ACF) graph and Partial Autocorrelation Function (PACF), then interpret.
   - Look for significant spikes.
-  ```python
+```python
 import pandas as pd
 import matplotlib.pyplot as plt
 from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
@@ -279,8 +279,51 @@ ax2.set_title('Partial Autocorrelation Function (PACF)')
 
 plt.show()
 ```
+![Screenshot 2024-01-13 155026](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/2025e9a5-ab65-49cd-b80a-e10717b55543)                                              
+Both graph indicates the most significant spike happens at lag = 1. Therefore, p = q = 1.                                                                                                                
+**p=1, d=0 & q=1**                                                                                                                                                                                                                                                                                                                                                                                                                      
 
-![Screenshot 2024-01-13 155026](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/2025e9a5-ab65-49cd-b80a-e10717b55543)
+**Visualize Forecast (For the next 30 Days)**
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.tsa.arima.model import ARIMA
+from matplotlib.ticker import FuncFormatter
+
+# Load Data
+df = pd.read_csv("C:\\Users\\Xin Cong\\OneDrive\\Desktop\\GitHub Projects\\Project 2 - E-commerce Sales Insights\\Daily Sales.csv")
+df['Date'] = pd.to_datetime(df['Date'], dayfirst=True)
+df = df.set_index('Date')
+df = df.resample('D').sum()
+
+# Fit ARIMA model
+p, d, q = 1, 0, 1
+model = ARIMA(df['Amount'], order=(p, d, q))
+results = model.fit()
+
+# Forecast the next 30 Days
+forecast_steps = 30
+forecast = results.get_forecast(steps=forecast_steps)
+
+# Generate date index for the forecast
+forecast_index = pd.date_range(df.index[-1] + pd.DateOffset(days=1), periods=forecast_steps, freq='D')
+combined_df = pd.concat([df, pd.DataFrame(index=forecast_index, data={'Amount': forecast.predicted_mean})])
+
+# Plotting
+plt.figure(figsize=(12, 6))
+plt.plot(combined_df.index, combined_df['Amount'], label='Actual', color='blue')
+plt.plot(forecast_index, forecast.predicted_mean, color='red', label='Forecasted')
+formatter = FuncFormatter(lambda x, _: '{:.0f}K'.format(x / 1000))
+plt.gca().yaxis.set_major_formatter(formatter)
+plt.xlabel('Date')
+plt.ylabel('Amount')
+plt.legend()
+plt.show()
+```
+![Screenshot 2024-01-13 171606](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/a812a484-deca-44a0-984d-007bc4b64c51)
+
+
+
 
 
 
