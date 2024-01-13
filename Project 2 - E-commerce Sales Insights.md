@@ -123,8 +123,84 @@ FROM [Amazon Sale Report];
 ![Screenshot 2024-01-11 231706](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/6833cd51-37cc-4832-a7b2-22e5c7906905)                            
 Total Quantity Sold = 19521
 
-#### Visualizations in Tableau 
-**Sales Trend Over Time**
+### Customer Segmentation
+**Calculation of Recency, Frequency & Monetary (RFM) score in Python**
+- Consider the weightage of Recency, Frequency and Monetary as 15%, 28% and 57% respectively.
+- Categorize customers based on RFM score:
+  - High Value Customer: RFM score ≥ 75
+  - Medium Value Customer: RFM score ≥ 60
+  - Low Value Customer: RFM score ≥ 40
+  - Lost Customer: RFM score < 40
+```python
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+df = pd.read_csv("C:\\Users\\Xin Cong\\OneDrive\\Desktop\\GitHub Projects\\Project 2 - E-commerce Sales Insights\\Amazon Sale Report - Cleaned.csv")
+
+# Recency, Frequency & Monetary (RFM)
+# Recency
+# Convert the "Date" column to datetime format
+df["Date"] = pd.to_datetime(df["Date"], format="%d/%m/%Y")
+# Group by "Order ID" and find the maximum date
+df_recency = df.groupby(by="Order ID", as_index=False)["Date"].max()
+# Rename Columns
+df_recency.columns = ["Order ID", "Last Purchase Date"]
+# Find most recent date
+recent_date = df_recency["Last Purchase Date"].max()
+# Calculate Recency
+df_recency["Recency"] = df_recency["Last Purchase Date"].apply(lambda x: (recent_date - x).days)
+
+# Frequency
+# Group by "Order ID" and find the total number of orders
+df_frequency = df.drop_duplicates().groupby(by="Order ID", as_index=False)["Date"].count()
+# Rename Columns
+df_frequency.columns = ["Order ID", "Frequency"]
+
+# Monetary
+# Calculate Total Sum for each order
+df["Sum"] = df["Amount"] * df["Qty"]
+# Group by "Order ID" and find sum for each customer
+df_monetary = df.groupby(by="Order ID", as_index=False)["Sum"].sum()
+# Rename Columns
+df_monetary.columns = ["Order ID", "Monetary"]
+
+# Merge RFM into 1 dataframe
+df_rfm = df_recency.merge(df_frequency, on="Order ID").merge(df_monetary, on="Order ID")
+# Drop "Last Purchase Date" column
+df_rfm = df_rfm.drop(columns="Last Purchase Date")
+
+# Calculate Ranks for RFM
+df_rfm["R_Rank"] = df_rfm["Recency"].rank(ascending=False)
+df_rfm["F_Rank"] = df_rfm["Frequency"].rank(ascending=True)
+df_rfm["M_Rank"] = df_rfm["Monetary"].rank(ascending=True)
+
+# Calculate Scores for RFM
+df_rfm["R_Score"] = (df_rfm["R_Rank"] / df_rfm["R_Rank"].max()) * 100
+df_rfm["F_Score"] = (df_rfm["F_Rank"] / df_rfm["F_Rank"].max()) * 100
+df_rfm["M_Score"] = (df_rfm["M_Rank"] / df_rfm["M_Rank"].max()) * 100
+
+# Drop Rank columns
+df_rfm = df_rfm.drop(columns=["R_Rank", "F_Rank", "M_Rank"])
+
+# Calculate Overall RFM score and Round up
+df_rfm["RFM_Score"] = df_rfm["R_Score"]*0.15 + df_rfm["F_Score"]*0.28 + df_rfm["M_Score"]*0.57
+df_rfm = df_rfm.round()
+
+# Categorize based on RFM score
+df_rfm["Customer_Segment"] = np.where(df_rfm["RFM_Score"] >= 75, "High Value Customer",
+                                      np.where(df_rfm["RFM_Score"] >= 60, "Medium Value Customer",
+                                               np.where(df_rfm["RFM_Score"] >= 40, "Low Value Customer", "Lost Customer")))
+
+# Plot to display Customer Segments
+plt.pie(df_rfm.Customer_Segment.value_counts(),
+        labels=df_rfm.Customer_Segment.value_counts().index,
+        autopct='%.0f%%')
+plt.show()
+```
+![Screenshot 2024-01-13 125921](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/54750630-1b20-4449-b23c-df6fd0f8ff69)
+
+---
 
 
 
