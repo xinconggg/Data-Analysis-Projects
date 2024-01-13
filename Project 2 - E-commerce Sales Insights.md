@@ -46,15 +46,14 @@ Conduct a thorough analysis of the provided e-commerce sales dataset to extract 
 ### Methods and Techniques:
 **1. Data Cleaning and Preprocessing:** Address missing data, outliers, and inconsistencies in the dataset.                                                                                
 **2. Exploratory Data Analysis (EDA):** Use statistical and graphical methods to uncover patterns and trends.                                                                  
-**3. Customer Segmentation:** Employ clustering techniques in R for customer categorization.  
-**4. Time Series Analysis:** Use R for time series analysis to understand sales trends over time.                                                                                  
-**5. Geospatial Analysis:** Leverage Tableau for visualizing regional sales on a map.        
-**6. Forecasting Model:** Implement time series forecasting techniques to predict future sales.
+**3. Customer Segmentation:** Employ clustering techniques in Python for customer categorization.  
+**4. Time Series Analysis:** Use Python for time series analysis to understand sales trends over time.                                                                                       
+**5. Forecasting Model:** Implement time series forecasting techniques to predict future sales.
 
 ### Tools and Technologies:
 **1. Data Cleaning and Analysis:** Excel, SQL                                                
 **2. Visualization:** Tableau                                                            
-**3. Statistical Analysis:** R                                                              
+**3. Statistical Analysis:** Python                                                              
 
 ### Significance of project:
 The significance of this e-commerce sales analysis project lies in its potential to revolutionize the decision-making process within the organization. By dissecting the provided dataset encompassing crucial sales-related parameters, the project aims to unveil valuable insights that can drive strategic initiatives. From understanding the dynamics of various sales channels and product categories to deciphering customer behavior and regional variations, the analysis provides a holistic view of the e-commerce landscape. These insights, coupled with evaluations of promotional impact, operational efficiency, and forecasting models, contribute to informed decision-making. The project's significance extends beyond retrospective analysis, offering actionable recommendations for optimizing sales strategies, improving customer satisfaction, and streamlining operational processes. Ultimately, the outcomes of this project are poised to empower stakeholders with a data-driven approach, facilitating agile responses to market dynamics and positioning the organization for sustained growth in the highly competitive e-commerce industry.
@@ -102,8 +101,8 @@ Using ```SUM```
 SELECT SUM(Amount) AS TotalRevenue
 FROM [Amazon Sale Report];
 ```
-![Screenshot 2024-01-11 231012](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/ddb4ee70-b4d3-46af-896c-f328977a93c9)                              
-Total Revenue = $13,059,222.00                                                                 
+![Screenshot 2024-01-13 135041](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/e591a1cc-391f-4511-89ef-1982216eef8b)                                                                        
+<ins>**Total Revenue = $75,384,975.00**</ins>                                                               
                                                       
 **- Calculate Average Order Value (AOV)**                                                  
 Using ```SUM```                                                                        
@@ -111,8 +110,8 @@ Using ```SUM```
 SELECT SUM(Amount)/COUNT(DISTINCT(Order_ID)) AS AverageOrderValue
 FROM [Amazon Sale Report];
 ```
-![Screenshot 2024-01-11 231358](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/4d821f46-068c-4b09-83f0-d8201dd3ab51)                                 
-Average Order Value = $723.82
+![Screenshot 2024-01-13 135114](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/384ef9e4-45ee-4975-9055-9c4035a35ead)                                                                    
+<ins>**Average Order Value = $696.26**</ins> 
 
 **- Calculate Total Quantity Sold**                                                      
 Using ```SUM```                                                                        
@@ -120,8 +119,8 @@ Using ```SUM```
 SELECT SUM(QTY) AS TotalQuantitySold
 FROM [Amazon Sale Report];
 ```
-![Screenshot 2024-01-11 231706](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/6833cd51-37cc-4832-a7b2-22e5c7906905)                            
-Total Quantity Sold = 19521
+![Screenshot 2024-01-13 135157](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/aaf58242-82b5-4a25-957f-0917ab791a2c)                                                                      
+<ins>**Total Quantity Sold = 116,454**</ins> 
 
 ### Customer Segmentation
 **Calculation of Recency, Frequency & Monetary (RFM) score in Python**
@@ -198,9 +197,97 @@ plt.pie(df_rfm.Customer_Segment.value_counts(),
         autopct='%.0f%%')
 plt.show()
 ```
-![Screenshot 2024-01-13 125921](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/54750630-1b20-4449-b23c-df6fd0f8ff69)
+![Screenshot 2024-01-13 133435](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/e27dfb8a-f189-4ae2-8f40-7b7999c3004f)
 
 ---
+
+### Impact of Promotion
+**Number of Sales with Promotion vs Number of Sales without Promotion:**               
+```python
+import pandas as pd
+import matplotlib.pyplot as plt
+
+# Load Data
+df = pd.read_csv("C:\\Users\\Xin Cong\\OneDrive\\Desktop\\GitHub Projects\\Project 2 - E-commerce Sales Insights\\Amazon Sale Report - Cleaned.csv")
+
+# Fill rows without Promotion with '0'
+df["promotion-ids"] = df["promotion-ids"].fillna(0)
+# Calculate the number of sales during promotions
+sales_with_promo = df.loc[df['promotion-ids'] != 0, 'Order ID'].nunique()
+# Calculate the number of sales during non-promotions
+sales_without_promo = df.loc[df['promotion-ids'] == 0, 'Order ID'].nunique()
+
+# Plot Bar graph
+labels = ['Sales with Promotion', 'Sales without Promotion']
+counts = [sales_with_promo, sales_without_promo]
+plt.bar(labels, counts, color=['cyan', 'yellow'])
+for i, count in enumerate(counts):
+    plt.text(i, count + 0.1, str(count), ha='center', va='bottom')
+plt.title('Impact of Promotions on Sales')
+plt.xlabel('Promotion Status')
+plt.ylabel('Number of Sales')
+plt.show()
+```
+![Screenshot 2024-01-13 140522](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/7f051446-69ec-4bf3-afd7-118ab8d28739)
+
+---
+
+### Time Series Analysis and Forecasting
+**Figure ARIMA model parameters (p, d & q)**
+- **d (Order of Differencing):**
+  - Start by figuring out parameter d using Augmented Dickey–Fuller test (ADF) test.
+  - Value of d is the number of times needed to difference the series to make it stationary.
+  - Time series is stationary when value of p ≤ 0.05.
+```python
+import pandas as pd
+from statsmodels.tsa.stattools import adfuller
+
+df = pd.read_csv("C:\\Users\\Xin Cong\\OneDrive\\Desktop\\GitHub Projects\\Project 2 - E-commerce Sales Insights\\Daily Sales.csv")
+df['Date'] = pd.to_datetime(df['Date'], dayfirst=False)
+df.set_index('Date', inplace=True)
+
+# Check for stationarity
+result = adfuller(df['Amount'])
+print('ADF Statistic:', result[0])
+print('p-value:', result[1])
+```
+![Screenshot 2024-01-13 153936](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/60f9871b-59ab-44e9-8e7e-020b66e8b9a4)                                  
+Since p-value ≤ 0.05, the time-series is stationary. 
+
+- **q and p (Order of Moving Average and Order of Order of Auto-Regressive):**
+  - Plot Autocorrelation Function (ACF) graph and Partial Autocorrelation Function (PACF), then interpret.
+  - Look for significant spikes.
+  ```python
+import pandas as pd
+import matplotlib.pyplot as plt
+from statsmodels.graphics.tsaplots import plot_acf, plot_pacf
+
+df = pd.read_csv("C:\\Users\\Xin Cong\\OneDrive\\Desktop\\GitHub Projects\\Project 2 - E-commerce Sales Insights\\Daily Sales.csv")
+df['Date'] = pd.to_datetime(df['Date'], dayfirst=False)
+df.set_index('Date', inplace=True)
+
+# Plot ACF and PACF
+fig, (ax1, ax2) = plt.subplots(2, 1, figsize=(10, 8))
+
+# ACF Plot
+plot_acf(df['Amount'].dropna(), lags=40, ax=ax1)
+ax1.set_title('Autocorrelation Function (ACF)')
+
+# PACF Plot
+plot_pacf(df['Amount'].dropna(), lags=40, ax=ax2)
+ax2.set_title('Partial Autocorrelation Function (PACF)')
+
+plt.show()
+```
+
+![Screenshot 2024-01-13 155026](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/2025e9a5-ab65-49cd-b80a-e10717b55543)
+
+
+
+
+
+
+
 
 
 
