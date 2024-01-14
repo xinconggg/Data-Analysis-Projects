@@ -82,7 +82,16 @@ SELECT SUM(Amount) AS TotalRevenue
 FROM [Amazon Sale Report];
 ```
 ![Screenshot 2024-01-13 135041](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/e591a1cc-391f-4511-89ef-1982216eef8b)                                                                        
-<ins>**Total Revenue = $75,384,975.00**</ins>                                                               
+<ins>**Total Revenue = $75,384,975**</ins>          
+
+**- Calculate Total Quantity Sold**                                                      
+Using ```SUM```                                                                        
+```sql
+SELECT SUM(QTY) AS TotalQuantitySold
+FROM [Amazon Sale Report];
+```
+![Screenshot 2024-01-13 135157](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/aaf58242-82b5-4a25-957f-0917ab791a2c)                                                                      
+<ins>**Total Quantity Sold = 116,454**</ins> 
                                                       
 **- Calculate Average Order Value (AOV)**                                                  
 Using ```SUM```                                                                        
@@ -93,14 +102,6 @@ FROM [Amazon Sale Report];
 ![Screenshot 2024-01-13 135114](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/384ef9e4-45ee-4975-9055-9c4035a35ead)                                                                    
 <ins>**Average Order Value = $696.26**</ins> 
 
-**- Calculate Total Quantity Sold**                                                      
-Using ```SUM```                                                                        
-```sql
-SELECT SUM(QTY) AS TotalQuantitySold
-FROM [Amazon Sale Report];
-```
-![Screenshot 2024-01-13 135157](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/aaf58242-82b5-4a25-957f-0917ab791a2c)                                                                      
-<ins>**Total Quantity Sold = 116,454**</ins> 
 
 ### Customer Segmentation
 **Calculation of Recency, Frequency & Monetary (RFM) score in Python**
@@ -303,6 +304,12 @@ plt.show()
 ![Screenshot 2024-01-13 171606](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/a812a484-deca-44a0-984d-007bc4b64c51)
 
 ### Visualization
+![Dashboard 1 (1)](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/788e6463-198e-4678-a995-d55c951bf8aa)
+
+---
+
+### Conclusion
+In conclusion, the thorough analysis of the e-commerce sales dataset has provided valuable insights into various dimensions. While the overall sales trend initially exceeded the average, a subsequent decline underscores the need for strategic adjustments to reignite growth. The performance analysis of sales channels, product categories, and regional variations offers targeted recommendations for optimization. Notably, both categories, Kurta and Set dominate sales, while other categories such as Saree, Blouse and Bottom lags behind. Customer segmentation reveals distinct segments, with a focus on high and medium-value customers for tailored marketing strategies. Additionally, understanding the impact of promotions on sales, with 67.59% attributed to promotional activities, enables a more nuanced approach to future campaigns. This comprehensive foundation equips stakeholders with actionable insights for informed decision-making, ensuring adaptability to market changes and sustained growth.
 
 
 
