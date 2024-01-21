@@ -144,6 +144,190 @@ WHERE MONTH(issue_date) = 11 AND YEAR(issue_date) = 2023
 ```
 ![Screenshot 2024-01-21 213201](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/9497ac33-7d6c-4b61-a2a9-b77b5b5e0699)
 
+---
+
+## Good Loans vs Bad Loans
+Good Loans: Fully Paid or Current
+Bad Loans: Charged off
+### Good and Bad Loans Percentage
+Calculating good and bad loan percentages is important for assessing the quality of a loan portfolio, evaluating risk exposure, and informing proactive risk management strategies, ultimately ensuring the financial stability of a lending institution.                                                                                                        
+```sql
+SELECT 
+	ROUND((COUNT(CASE WHEN loan_status = 'Fully Paid' OR loan_status = 'Current' THEN id end)*100.0)
+	/
+	COUNT(ID),2) AS Good_Loan_Percentage
+FROM bank_loan
+
+SELECT 
+	ROUND((COUNT(CASE WHEN loan_status = 'Charged off' THEN id end)*100.0)
+	/
+	COUNT(ID),2) AS Bad_Loan_Percentage
+FROM bank_loan
+```
+![Screenshot 2024-01-21 221649](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/25721361-de8e-45d7-9ea9-7473f4a24a7e)
+![Screenshot 2024-01-21 221657](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/ec722dda-7145-4ee2-9fe3-502c0cc367fc)        
+      
+
+### Good and Bad Loans Applications
+Calculating Good and Bad Loan Applications is essential for evaluating the overall health and risk profile of a lending portfolio, aiding in risk management, strategic decision-making, and ensuring financial stability by assessing the quality and performance of loans within a financial institution.                                                                                                     
+```sql
+SELECT COUNT(id) AS Good_Loan_Applications from bank_loan 
+WHERE loan_status = 'Fully Paid' OR loan_status = 'Current'
+
+SELECT COUNT(id) AS Bad_Loan_Applications from bank_loan 
+WHERE loan_status = 'Charged off'
+```
+![Screenshot 2024-01-21 221207](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/26d6b5da-cc45-425b-99fe-2648306769cd)
+![Screenshot 2024-01-21 221216](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/9357cc1f-437e-4347-8fb0-93677e81a612)        
+
+### Good and Bad Loans Funded Amount
+Calculating Good and Bad Loan Funded Amount provides insights into the quality and performance of loans, aiding in strategic planning, optimizing resource allocation, and ensuring the institution's long-term stability by evaluating the impact of both successful and problematic loans on the overall funding portfolio.                                                                                                   
+```sql
+SELECT SUM(loan_amount) AS Good_Loan_Funded_Amount FROM bank_loan
+WHERE loan_status = 'Fully Paid' OR loan_status = 'Current'
+
+SELECT SUM(loan_amount) AS Bad_Loan_Funded_Amount FROM bank_loan
+WHERE loan_status = 'Fully Paid' OR loan_status = 'Current'
+```
+ ![Screenshot 2024-01-21 223358](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/ea341f0d-00f8-49ce-9867-924d3e863a0b)
+ ![Screenshot 2024-01-21 223408](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/ef3fa5aa-1f61-451a-9761-29a69486b877)        
+ 
+
+### Good and Bad Loans Total Received Amount
+Analyzing the total received amounts for Good and Bad Loans is crucial for assessing the financial impact and repayment behavior of borrowers. It provides valuable insights into the overall revenue and risk associated with the loan portfolio, aiding in effective risk management, strategic decision-making, and ensuring the financial stability of the lending institution by evaluating the success of loan repayment and identifying potential areas for improvement in the lending process.                                                                                          
+```sql
+SELECT SUM(total_payment) AS Good_Loan_Received_Amount from bank_loan
+WHERE loan_status = 'Fully Paid' OR loan_status = 'Current'
+
+SELECT SUM(total_payment) Bad_Loan_Received_Amount from bank_loan
+WHERE loan_status = 'Charged off'
+```
+![Screenshot 2024-01-21 222800](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/e644dccc-9cc2-4376-badd-b812db572172)
+![Screenshot 2024-01-21 222809](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/088a5069-803c-4606-8d0e-a493fb9d8641)                
+
+### Loan Status
+Loan status is crucial as it serves as a key indicator, offering insights into critical metrics such as total loan applications, funded amounts, amounts received, month-to-date figures, average interest rates, and debt-to-income ratios. This information is essential for evaluating the health of the loan portfolio, assessing operational efficiency, and making data-driven decisions that impact overall financial performance and strategic planning within a lending institution.       
+**Loan Count, Total Amount Received, Total Funded Amount, Average Interest Rate and Debt-to-Income Ratio**        
+```sql
+SELECT 
+        loan_status,
+        COUNT(id) AS Loan_Count,
+        SUM(total_payment) AS Total_Amount_Received,
+        SUM(loan_amount) AS Total_Funded_Amount,
+        ROUND(AVG(int_rate * 100),2) AS Interest_Rate,
+        ROUND(AVG(dti * 100),2) AS DTI
+FROM
+	bank_loan
+GROUP BY
+	loan_status
+```
+![Screenshot 2024-01-21 224621](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/f72864e6-b6e3-41cb-a84d-764323b549f6)        
+
+**MTD Amount Received and MTD Funded Amount**        
+```sql
+SELECT 
+        loan_status,
+        SUM(total_payment) AS MTD_Amount_Received,
+        SUM(loan_amount) AS MTD_Funded_Amount
+FROM
+	bank_loan
+WHERE
+	MONTH(issue_date) = 12 AND YEAR(issue_date) = 2023
+GROUP BY
+	loan_status
+```
+![Screenshot 2024-01-21 225113](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/3e37204e-4f0f-4a4c-8556-0c2fbbda1652)        
+
+---
+
+## Data Required for Data Visualization
+### Monthly Trends by Issue Date
+```sql
+SELECT 
+	MONTH(issue_date) AS Month_Number,
+	DATENAME(MONTH, issue_date) AS Month_Name,
+	COUNT(id) AS Total_Loan_Applicants,
+	SUM(loan_amount) AS Total_Funded_Amount,
+	SUM(total_payment) AS Total_Amount_Received
+FROM bank_loan
+GROUP BY MONTH(issue_date), DATENAME(MONTH, issue_date)
+ORDER BY MONTH(issue_date)
+```
+![Screenshot 2024-01-21 230412](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/1591d813-307f-4d23-885f-0f929147dc63)          
+
+### Regional Analysis by State
+```sql
+SELECT 
+	address_state AS State,
+	COUNT(id) AS Total_Loan_Applicants,
+	SUM(loan_amount) AS Total_Funded_Amount,
+	SUM(total_payment) AS Total_Amount_Received
+FROM bank_loan
+GROUP BY address_state
+ORDER BY address_state
+```
+![Screenshot 2024-01-21 230912](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/f52852f7-53ba-4f9f-83aa-74e8d89e73e6)        
+
+### Loan Term Analysis
+```sql
+SELECT 
+	term AS Loan_Term,
+	COUNT(id) AS Total_Loan_Applicants,
+	SUM(loan_amount) AS Total_Funded_Amount,
+	SUM(total_payment) AS Total_Amount_Received
+FROM bank_loan
+GROUP BY term
+ORDER BY term
+```
+![Screenshot 2024-01-21 231046](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/06b69ac9-b7e0-44db-85fd-e874dad1e6dd)        
+
+### Employment Length Analysis
+```sql
+SELECT 
+	emp_length AS Employment_Length,
+	COUNT(id) AS Total_Loan_Applicants,
+	SUM(loan_amount) AS Total_Funded_Amount,
+	SUM(total_payment) AS Total_Amount_Received
+FROM bank_loan
+GROUP BY emp_length
+ORDER BY emp_length
+```
+![Screenshot 2024-01-21 231214](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/efe1da5a-9773-4f14-9681-7a77a7bd5717)        
+
+### Loan Purpose Breakdown
+```sql
+SELECT 
+	purpose AS Purpose,
+	COUNT(id) AS Total_Loan_Applicants,
+	SUM(loan_amount) AS Total_Funded_Amount,
+	SUM(total_payment) AS Total_Amount_Received
+FROM bank_loan
+GROUP BY purpose
+ORDER BY purpose
+```
+![Screenshot 2024-01-21 231349](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/7f2b01d8-66aa-45e1-859d-afa2d635e47a)        
+
+### Home Ownership Analysis
+```sql
+SELECT 
+	home_ownership AS Home_Ownership,
+	COUNT(id) AS Total_Loan_Applicants,
+	SUM(loan_amount) AS Total_Funded_Amount,
+	SUM(total_payment) AS Total_Amount_Received
+FROM bank_loan
+GROUP BY home_ownership
+ORDER BY home_ownership
+```
+![Screenshot 2024-01-21 231508](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/64f882f0-22b9-45b8-a7f5-7bb5b83e5e80)
+
+---
+
+
+
+
+
+
+
 
 
 
