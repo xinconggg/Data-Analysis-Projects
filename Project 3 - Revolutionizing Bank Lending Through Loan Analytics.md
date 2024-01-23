@@ -322,6 +322,61 @@ ORDER BY home_ownership
 
 ---
 
+## Data Visualization
+### Some DAX formulas to display values for Interactive Dashboard
+**Total Loan Applications**	
+```dax
+TotalLoanApplications = 
+FORMAT(
+    CALCULATE(
+        COUNTROWS('bank_loan')
+    )/1000,
+    "#0,0.0K"
+)
+```
+
+**MoM Loan Applications**	
+```dax
+MoMApplication = 
+VAR CurrentMonth = [MTDLoanApplications]
+VAR PrevMonth = [PMTDLoanApplications]
+RETURN
+    FORMAT(
+        IF(ISBLANK(CurrentMonth) || ISBLANK(PrevMonth), BLANK(), (CurrentMonth - PrevMonth) / CurrentMonth),"#.0%")
+```
+
+**Percentage of Good Loans**	
+```dax
+GoodLoanPercentage = 
+FORMAT(
+    DIVIDE(
+        CALCULATE(
+            COUNTROWS('bank_loan'),
+            'bank_loan'[Good_Bad_Loan] = "Good"
+        ),
+        CALCULATE(
+            COUNTROWS('bank_loan')
+        )
+    ),
+    "0.00%"
+)
+```
+
+---
+
+## Final Results
+### Summary 
+![Summary](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/80426f52-603a-4c2b-83b3-370365f4d2ca)	
+						
+![2024-01-2320-37-20-ezgif com-video-to-gif-converter](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/793a55b2-cf30-49a0-b53b-1547bd035af2)
+
+### Overview
+![Overview](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/985f2eab-4dca-40b4-abcf-cb4047ce5a81)
+														
+![Overview](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/e2724751-aabd-4d25-b63a-538573c25a16)
+
+
+
 
 
 
