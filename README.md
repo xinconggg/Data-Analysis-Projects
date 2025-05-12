@@ -1,4 +1,4 @@
-# Projects
+![Single 1](https://github.com/user-attachments/assets/1bd561f4-ab3c-450e-93ad-5378911c781f)# Projects
 
 ## [Exploring Global Temperature Trends - A Comparative Analysis with Singapore](https://github.com/xinconggg/Data-Analysis-Projects/blob/main/(Project)%20Exploring%20Global%20Temperature%20Trends.ipynb)
 - Implemented ARIMA model for time-series analysis in Python
@@ -41,4 +41,10 @@ This project aims to analyze employee attrition factors and develop a predictive
 - **Interactive App Deployment:** Developing a Streamlit app for real-time predictions, including bulk CSV file uploads and manual inputs for single employee risk assessments.
 - **Data Visualization:** Creating interactive Power BI dashboards for real-time data exploration, pattern identification, and strategic decision-making.
 Overall, the project integrates data science, machine learning, and interactive data visualization to provide a comprehensive solution for proactive employee retention management.
+#### Bulk Prediction
+![Bulk](https://github.com/user-attachments/assets/d276ddf4-0cda-4c55-a9ed-a9dd0d21ce11)
+#### Single Prediction (Low Risk of Attrition)
+![Single 1](https://github.com/user-attachments/assets/afcb0922-c38c-4a65-bf4b-b2910dfa6246)
+#### Single Prediction (High Risk of Attrition)
+![Single 2](https://github.com/user-attachments/assets/dbe06948-6425-4805-aac5-61363a20d6b9)
 
