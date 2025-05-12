@@ -30,3 +30,15 @@
 - Improved operational transparency and strategic adaptability within the dynamic financial landscape.
 ![298943525-793a55b2-cf30-49a0-b53b-1547bd035af2](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/91b02d6e-33d6-4d64-9752-cec5e139b301)
 ![298944853-e2724751-aabd-4d25-b63a-538573c25a16](https://github.com/xinconggg/Data-Analysis-Projects/assets/82378681/884acc1d-0c3e-4c03-ae4a-519fdc886a5e)
+
+## [Employee Attrition Risk Analysis](https://github.com/xinconggg/Data-Analysis-Projects/blob/main/(Project)%20Employee%20Attrition%20Risk%20Analysis/Employee%20Attrition%20Risk%20Analysis.ipynb)
+This project aims to analyze employee attrition factors and develop a predictive model to identify at-risk employees, helping organizations improve retention strategies. The workflow includes:
+- **Data Cleaning and Preprocessing:** Handling missing values, duplicates, and data inconsistencies, along with encoding categorical variables and scaling numerical features for model stability.
+- **Exploratory Data Analysis (EDA):** Identifying key factors influencing attrition through correlation analysis, distribution plots, and outlier detection to uncover valuable insights.
+- **Feature Engineering:** Creating meaningful features like average monthly income per year and tenure ratios to enhance predictive power.
+- **Predictive Modeling:** Building and tuning machine learning models, including Logistic Regression, Random Forest, and XGBoost, with cross-validation for robust performance.
+- **Model Evaluation and Validation:** Assessing models using precision, recall, F1-score, ROC-AUC, and cross-validation scores to select the best-performing model.
+- **Interactive App Deployment:** Developing a Streamlit app for real-time predictions, including bulk CSV file uploads and manual inputs for single employee risk assessments.
+- **Data Visualization:** Creating interactive Power BI dashboards for real-time data exploration, pattern identification, and strategic decision-making.
+Overall, the project integrates data science, machine learning, and interactive data visualization to provide a comprehensive solution for proactive employee retention management.
+
