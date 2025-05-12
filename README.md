@@ -1,5 +1,3 @@
-![Single 1](https://github.com/user-attachments/assets/1bd561f4-ab3c-450e-93ad-5378911c781f)# Projects
-
 ## [Exploring Global Temperature Trends - A Comparative Analysis with Singapore](https://github.com/xinconggg/Data-Analysis-Projects/blob/main/(Project)%20Exploring%20Global%20Temperature%20Trends.ipynb)
 - Implemented ARIMA model for time-series analysis in Python
 - Conducted data cleaning and created subsets for global and Singaporean temperature data
@@ -47,4 +45,11 @@ Overall, the project integrates data science, machine learning, and interactive 
 ![Single 1](https://github.com/user-attachments/assets/afcb0922-c38c-4a65-bf4b-b2910dfa6246)
 #### Single Prediction (High Risk of Attrition)
 ![Single 2](https://github.com/user-attachments/assets/dbe06948-6425-4805-aac5-61363a20d6b9)
+#### Data Visualization
+![Untitledvideo-MadewithClipchamp-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/613aff27-ca9b-477b-a530-4380bc175111)
+![AttritionAnalysis-ezgif com-video-to-gif-converter](https://github.com/user-attachments/assets/d9df73ec-a135-4fe2-90bd-ecbfa819670b)
+
+
+
+
 
